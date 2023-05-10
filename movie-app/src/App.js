@@ -11,9 +11,8 @@ import MenuBar from "./components/MenuBar";
 import Home from "./components/Home";
 
 
-
-
 const App = () => {
+
     return (
         <StrictMode>
             <BrowserRouter>

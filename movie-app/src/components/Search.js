@@ -1,9 +1,16 @@
-import React from 'react';
-import Cards from "./Cards";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
+import React, { useEffect, useState } from 'react';
+import Cards from './Cards';
+import Grid from '@mui/material/Grid';
 import { makeStyles } from '@mui/styles';
-import { TextField, MenuItem, FormControl, InputLabel, Select, Button } from '@mui/material';
+import {
+    TextField,
+    FormControl,
+    InputLabel,
+    Button,
+    CircularProgress,
+} from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import useFetch from '../hooks/useFetch';
 
 const useStyles = makeStyles((theme) => ({
     s_root: {
@@ -11,45 +18,32 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         padding: theme.spacing(2),
+        gap: theme.spacing(2),
         '& > *': {
             width: '25ch',
         },
     },
     formControl: {
-        margin: theme.spacing(1),
+        margin: theme.spacing(2),
         minWidth: 120,
     },
 }));
 
-const genres = [
-    {
-        value: 'action',
-        label: 'Action',
-    },
-    {
-        value: 'comedy',
-        label: 'Comedy',
-    },
-    {
-        value: 'drama',
-        label: 'Drama',
-    },
-];
+const API_KEY = process.env.REACT_APP_RMDB_KEY;
 
-
-
-function SearchBar() {
+function SearchBar({ onSearch }) {
     const classes = useStyles();
-    const [searchText, setSearchText] = React.useState('');
-    const [selectedGenre, setSelectedGenre] = React.useState('');
-    const [selectedPubDate, setSelectedPubDate] = React.useState('');
+    const [searchText, setSearchText] = useState('');
+    const [selectedGenres, setSelectedGenres] = useState([]); // Use an array to store selected genres
+    const [selectedPubDate, setSelectedPubDate] = useState('');
+
 
     const handleSearchTextChange = (event) => {
         setSearchText(event.target.value);
     };
 
-    const handleGenreChange = (event) => {
-        setSelectedGenre(event.target.value);
+    const handleGenreChange = (event, values) => {
+        setSelectedGenres(values); // Update the selected genres
     };
 
     const handlePubDateChange = (event) => {
@@ -58,22 +52,47 @@ function SearchBar() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(`Search Text: ${searchText}, Genre: ${selectedGenre}, Publication Date: ${selectedPubDate}`);
-        // call API or perform search
+        onSearch(searchText, selectedGenres, selectedPubDate);
     };
+
+    const { response: genres, error: g_error, isLoading: g_isLoading } = useFetch(
+        `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`,
+        { method: 'GET' }
+    );
+
     return (
-        <form className={classes.s_root} noValidate autoComplete="off" onSubmit={handleSubmit}>
-            <TextField id="search-text" label="Search" variant="outlined" value={searchText} onChange={handleSearchTextChange} />
+        <form
+            className={classes.s_root}
+            noValidate
+            autoComplete="on"
+            onSubmit={handleSubmit}
+        >
+            <TextField
+                id="search-text"
+                label="Search"
+                variant="outlined"
+                value={searchText}
+                onChange={handleSearchTextChange}
+            />
             <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel id="genre-select-label">Genre</InputLabel>
-                <Select labelId="genre-select-label" id="genre-select" value={selectedGenre} onChange={handleGenreChange} label="Genre">
-                    {genres.map((genre) => (
-                        <MenuItem key={genre.value} value={genre.value}>
-                            {genre.label}
-                        </MenuItem>
-                    ))}
-                </Select>
+                <InputLabel id="genre-select-label"></InputLabel>
+                <Autocomplete
+                    multiple
+                    id="genre-select"
+                    options={genres ? genres.genres : []}
+                    getOptionLabel={(option) => option.name}
+                    value={selectedGenres}
+                    onChange={handleGenreChange}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            variant="outlined"
+                            label="Genres"
+                        />
+                    )}
+                />
             </FormControl>
+
             <TextField
                 id="pubdate-input"
                 label="Publication Date"
@@ -94,22 +113,40 @@ function SearchBar() {
     );
 }
 
-
 /**
  * This component is used to display the header
  * @returns {JSX.Element}
  * @constructor
  */
+
+
 const Search = () => {
+    const [searchP, setSearchP] = useState([]);
+
+    const handleSearch = (searchText,selectedGenres, selectedPubDate) => {
+        setSearchP({text: searchText, genres: selectedGenres, pubDate: selectedPubDate});
+    };
+
+    const { response: res, error: g_error, isLoading: g_isLoading } = useFetch(
+        `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchP.text}`,
+        { method: 'GET' }
+    );
+
+    console.log(res);
+
     return (
         <>
+            <SearchBar onSearch={handleSearch} />
+            <Grid container spacing={4}>
 
-                <SearchBar />
-                <Grid container spacing={4}>
-                    <Cards />
-                </Grid>
+                { res && res.total_results > 0 && res.results.map((movie) => (  <Cards data={movie} />))}
+                { res && res.total_results == 0 && "not data found"}
+
+            </Grid>
+
+            { g_isLoading && <CircularProgress /> }
         </>
     );
-}
+};
 
 export default Search;
