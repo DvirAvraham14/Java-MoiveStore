@@ -1,85 +1,118 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
-import {Link, Outlet} from "react-router-dom";
-import {Badge} from "@mui/material";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Footer from "./Footer";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {Link, Outlet} from 'react-router-dom';
+import Box from '@mui/material/Box';
+
+import AppMenu from './menuCom/AppMenu';
+import CartIconButton from './menuCom/CartIconButton';
+import PageButtons from './menuCom/PageButtons';
+import Footer from './Footer';
 
 const theme = createTheme();
 
-const pages = [{name: 'Home', path: ''},
-    {name: 'Search', path: 'search'}, {name: 'Checkout', path: 'checkout'}];
+const WEBSITE = 'TMDB';
 
-function ResponsiveAppBar() {
+function MenuBar() {
+    const [anchorElNav, setAnchorElNav] = useState(null);
+
+    const handleOpenNavMenu = (event) => {
+        setAnchorElNav(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
 
     return (
         <>
-        <AppBar position="static">
-            <Container maxWidth="xl">
-                <Toolbar >
-                    <LocalMoviesIcon
-                        sx={{
-                            display: { xs: 'none', md: 'flex' },
-                            mr: 1,
-                            fontSize: '2.5rem',
-                            color: 'black'
-                        }}
-                    />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        Our
-                    </Typography>
-
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Link to={`/${page.path}`} key={page.name}  underline="none">
-                                <Button sx={{ my: 2, color: 'white', display: 'block' }}>{page.name}</Button>
-                            </Link>
-                        ))}
-                    </Box>
-
-                        <IconButton component={Link} to='/cart' size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
-                                <ShoppingCartIcon  />
-                            </Badge>
-                        </IconButton>
-
-
-
-                </Toolbar>
-            </Container>
-        </AppBar>
             <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Container sx={{ py: 8 }} maxWidth="md">
-                     <Outlet/>
-                </Container>
-                <Footer />
+                <CssBaseline/>
+                <Box sx={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
+                    <header>
+                        <AppBar position="static">
+                            <Container maxWidth="xl">
+                                <Toolbar disableGutters>
+                                    <LocalMoviesIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
+                                    <Typography
+                                        variant="h6"
+                                        noWrap
+                                        component="a"
+                                        href="/"
+                                        sx={{
+                                            mr: 2,
+                                            display: {xs: 'none', md: 'flex'},
+                                            fontFamily: 'monospace',
+                                            fontWeight: 700,
+                                            letterSpacing: '.3rem',
+                                            color: 'inherit',
+                                            textDecoration: 'none',
+                                        }}
+                                    >
+                                        {WEBSITE}
+                                    </Typography>
+
+                                    <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
+                                        <AppMenu anchorElNav={anchorElNav} handleOpenNavMenu={handleOpenNavMenu}
+                                                 handleCloseNavMenu={handleCloseNavMenu}/>
+                                    </Box>
+
+                                    <LocalMoviesIcon sx={{display: {xs: 'flex', md: 'none'}, mr: 1}}/>
+                                    <Typography
+                                        variant="h5"
+                                        noWrap
+                                        component="a"
+                                        href="/"
+                                        sx={{
+                                            mr: 2,
+                                            display: {xs: 'flex', md: 'none'},
+                                            flexGrow: 1,
+                                            fontFamily: 'monospace',
+                                            fontWeight: 700,
+                                            letterSpacing: '.3rem',
+                                            color: 'inherit',
+                                            textDecoration: 'none',
+                                        }}
+                                    >
+                                        {WEBSITE}
+                                    </Typography>
+
+                                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
+                                        <PageButtons handleCloseNavMenu={handleCloseNavMenu}/>
+                                    </Box>
+
+                                    <Box sx={{flexGrow: 0}}>
+                                        <CartIconButton/>
+                                    </Box>
+                                </Toolbar>
+                            </Container>
+                        </AppBar>
+                    </header>
+                    <main>
+                        <Grid
+                            container
+                            sx={{ py: 8 }}
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            <Grid item xs={12} md={12} lg={10} xl={10}>
+                                <Outlet />
+                            </Grid>
+                        </Grid>
+                    </main>
+
+                    <Footer/>
+
+                </Box>
             </ThemeProvider>
         </>
-
     );
 }
-export default ResponsiveAppBar;
+
+export default MenuBar;

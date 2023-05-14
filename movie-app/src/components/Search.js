@@ -1,150 +1,158 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Cards from './Cards';
 import Grid from '@mui/material/Grid';
-import { makeStyles } from '@mui/styles';
 import {
-    TextField,
-    FormControl,
-    InputLabel,
-    Button,
     CircularProgress,
+    Typography,
 } from '@mui/material';
-import Autocomplete from '@mui/material/Autocomplete';
 import useFetch from '../hooks/useFetch';
-
-const useStyles = makeStyles((theme) => ({
-    s_root: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: theme.spacing(2),
-        gap: theme.spacing(2),
-        '& > *': {
-            width: '25ch',
-        },
-    },
-    formControl: {
-        margin: theme.spacing(2),
-        minWidth: 120,
-    },
-}));
+import SearchBar from './SearchBar';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import CardMedia from '@mui/material/CardMedia';
+import ModalComponent from './ModalComponent';
 
 const API_KEY = process.env.REACT_APP_RMDB_KEY;
-
-function SearchBar({ onSearch }) {
-    const classes = useStyles();
-    const [searchText, setSearchText] = useState('');
-    const [selectedGenres, setSelectedGenres] = useState([]); // Use an array to store selected genres
-    const [selectedPubDate, setSelectedPubDate] = useState('');
-
-
-    const handleSearchTextChange = (event) => {
-        setSearchText(event.target.value);
-    };
-
-    const handleGenreChange = (event, values) => {
-        setSelectedGenres(values); // Update the selected genres
-    };
-
-    const handlePubDateChange = (event) => {
-        setSelectedPubDate(event.target.value);
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        onSearch(searchText, selectedGenres, selectedPubDate);
-    };
-
-    const { response: genres, error: g_error, isLoading: g_isLoading } = useFetch(
-        `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`,
-        { method: 'GET' }
-    );
-
-    return (
-        <form
-            className={classes.s_root}
-            noValidate
-            autoComplete="on"
-            onSubmit={handleSubmit}
-        >
-            <TextField
-                id="search-text"
-                label="Search"
-                variant="outlined"
-                value={searchText}
-                onChange={handleSearchTextChange}
-            />
-            <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel id="genre-select-label"></InputLabel>
-                <Autocomplete
-                    multiple
-                    id="genre-select"
-                    options={genres ? genres.genres : []}
-                    getOptionLabel={(option) => option.name}
-                    value={selectedGenres}
-                    onChange={handleGenreChange}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            variant="outlined"
-                            label="Genres"
-                        />
-                    )}
-                />
-            </FormControl>
-
-            <TextField
-                id="pubdate-input"
-                label="Publication Date"
-                type="date"
-                variant="outlined"
-                className={classes.formControl}
-                value={selectedPubDate}
-                onChange={handlePubDateChange}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-            />
-
-            <Button variant="contained" color="primary" type="submit">
-                Search
-            </Button>
-        </form>
-    );
-}
-
-/**
- * This component is used to display the header
- * @returns {JSX.Element}
- * @constructor
- */
-
+const PAGE_SIZE = 20; // Number of movies to load per page
 
 const Search = () => {
     const [searchP, setSearchP] = useState([]);
+    const [page, setPage] = useState(1); // Current page for pagination
+    const [popularMovies, setPopularMovies] = useState([]);
+    const [searchedMovies, setSearchedMovies] = useState([]);
+    const [isFetching, setIsFetching] = useState(false); // Flag to track whether data is being fetched
+    const loaderRef = useRef(null); // Ref for the intersection observer target
 
-    const handleSearch = (searchText,selectedGenres, selectedPubDate) => {
-        setSearchP({text: searchText, genres: selectedGenres, pubDate: selectedPubDate});
-    };
-
-    const { response: res, error: g_error, isLoading: g_isLoading } = useFetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchP.text}`,
-        { method: 'GET' }
+    const { response: p_data, error: p_error, isLoading: p_isLoading } = useFetch(
+        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`
     );
 
-    console.log(res);
+    const { response: res, error: g_error, isLoading: g_isLoading } = useFetch(
+        searchP.url
+    );
+    useEffect(() => {
+        // Reset the page when search parameters change
+        setPage(1);
+    }, [searchP]);
+
+    useEffect(() => {
+        // Load popular movies on initial render
+        if (p_data) {
+            setPopularMovies(p_data.results);
+        }
+    }, [p_data]);
+
+    useEffect(() => {
+        // Load searched movies when search results change
+        if (res) {
+            if (page === 1) {
+                setSearchedMovies(res.results);
+            } else {
+                setSearchedMovies((prevMovies) => [...prevMovies, ...res.results]);
+            }
+            setIsFetching(false);
+        }
+    }, [res, page]);
+
+    useEffect(() => {
+        // Create the intersection observer and observe the loaderRef
+        const options = {
+            root: null,
+            rootMargin: '20px',
+            threshold: 1.0,
+        };
+        const observer = new IntersectionObserver(handleObserver, options);
+
+        if (loaderRef.current) {
+            observer.observe(loaderRef.current);
+        }
+
+        // Clean up the observer
+        return () => {
+            if (loaderRef.current) {
+                observer.unobserve(loaderRef.current);
+            }
+        };
+    }, []);
+
+    const handleObserver = (entries) => {
+        const target = entries[0];
+        if (target.isIntersecting) {
+            setPage((prevPage) => prevPage + 1);
+            setIsFetching(true);
+        }
+    };
+
+    const handleSearch = (searchText, genreIds, selectedPubDate) => {
+        let searchQuery = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchText}`;
+
+        if (genreIds.length > 0) {
+            console.log(genreIds);
+            searchQuery += `&with_genres=${genreIds.map((genre) => genre )}`;
+        }
+
+        if (selectedPubDate) {
+            searchQuery += `&primary_release_date.gte=${selectedPubDate}`;
+        }
+
+        if (page) {
+            searchQuery += `&page=${page}`;
+        }
+
+        setSearchP({ text: searchText,url: searchQuery});
+    };
+
+
+    const [open, setOpen] = useState(false);
+    const [modalData, setModalData] = useState([]);
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOpen = (data) => {
+        setModalData(data);
+        console.log(modalData);
+        setOpen(true);
+    };
 
     return (
         <>
             <SearchBar onSearch={handleSearch} />
-            <Grid container spacing={4}>
+            <ModalComponent open={open} handleClose={handleClose} data={modalData} />
 
-                { res && res.total_results > 0 && res.results.map((movie) => (  <Cards data={movie} />))}
-                { res && res.total_results == 0 && "not data found"}
+            {!searchP.text && p_data && (
+                <>
+                    <Typography variant="h6" sx={{ mt: 2, fontWeight: 'bold' }}>Popular Movies</Typography>
+                    <Grid sx={{ py: 2 }} container spacing={
+                        2} justifyContent="center">
+                        {popularMovies.map((movie) => (
+                            <Grid item key={movie.id} xs={12} sm={6} md={4} lg={4} xl={4}>
+                                <Cards data={movie} openModal={handleOpen} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </>
+            )}
+            {searchP.text && searchedMovies && (
+                <>
+                    <Typography variant="h6" sx={{ mt: 2, fontWeight: 'bold' }}>Search: {searchP.text}</Typography>
+                    <Grid sx={{ py: 2 }} container spacing={2} justifyContent="center">
+                        {searchedMovies.map((movie) => (
+                            <Grid item key={movie.id} xs={12} sm={6} md={4} lg={4} xl={4}>
+                                <Cards data={movie} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </>
+            )}
 
-            </Grid>
+            {isFetching && (
+                <Typography variant="body1" sx={{ mt: 2, textAlign: 'center' }}>Loading...</Typography>
+            )}
+            {/* Intersection observer target */}
+            <div ref={loaderRef} />
 
-            { g_isLoading && <CircularProgress /> }
         </>
     );
 };
