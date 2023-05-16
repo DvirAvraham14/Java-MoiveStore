@@ -17,13 +17,13 @@ const MultiSelect = ({ value, onChange, options, label }) => {
                 onChange={handleChange}
                 renderValue={(selected) => (
                     <div>
-                        {selected.map((value) => (
+                        {selected?.map((value) => (
                             <Chip key={value} label={value} />
                         ))}
                     </div>
                 )}
             >
-                {options.map((option) => (
+                { options?.map((option) => (
                     <MenuItem key={option.id} value={option.name}>
                         <Checkbox checked={value.includes(option.name)} />
                         <ListItemText primary={option.name} />

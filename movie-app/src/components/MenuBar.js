@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import AppMenu from './menuCom/AppMenu';
 import CartIconButton from './menuCom/CartIconButton';
 import PageButtons from './menuCom/PageButtons';
-import Footer from './Footer';
+//import Footer from './Footer';
 
 const theme = createTheme();
 
@@ -31,88 +31,110 @@ function MenuBar() {
     };
 
     return (
-        <>
-            <ThemeProvider theme={theme}>
-                <CssBaseline/>
-                <Box sx={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
-                    <header>
-                        <AppBar position="static">
-                            <Container maxWidth="xl">
-                                <Toolbar disableGutters>
-                                    <LocalMoviesIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
-                                    <Typography
-                                        variant="h6"
-                                        noWrap
-                                        component="a"
-                                        href="/"
-                                        sx={{
-                                            mr: 2,
-                                            display: {xs: 'none', md: 'flex'},
-                                            fontFamily: 'monospace',
-                                            fontWeight: 700,
-                                            letterSpacing: '.3rem',
-                                            color: 'inherit',
-                                            textDecoration: 'none',
-                                        }}
-                                    >
-                                        {WEBSITE}
-                                    </Typography>
 
-                                    <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
-                                        <AppMenu anchorElNav={anchorElNav} handleOpenNavMenu={handleOpenNavMenu}
-                                                 handleCloseNavMenu={handleCloseNavMenu}/>
-                                    </Box>
-
-                                    <LocalMoviesIcon sx={{display: {xs: 'flex', md: 'none'}, mr: 1}}/>
-                                    <Typography
-                                        variant="h5"
-                                        noWrap
-                                        component="a"
-                                        href="/"
-                                        sx={{
-                                            mr: 2,
-                                            display: {xs: 'flex', md: 'none'},
-                                            flexGrow: 1,
-                                            fontFamily: 'monospace',
-                                            fontWeight: 700,
-                                            letterSpacing: '.3rem',
-                                            color: 'inherit',
-                                            textDecoration: 'none',
-                                        }}
-                                    >
-                                        {WEBSITE}
-                                    </Typography>
-
-                                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-                                        <PageButtons handleCloseNavMenu={handleCloseNavMenu}/>
-                                    </Box>
-
-                                    <Box sx={{flexGrow: 0}}>
-                                        <CartIconButton/>
-                                    </Box>
-                                </Toolbar>
-                            </Container>
-                        </AppBar>
-                    </header>
-                    <main>
-                        <Grid
-                            container
-                            sx={{ py: 8 }}
-                            justifyContent="center"
-                            alignItems="center"
+        <header>
+            <AppBar position="static">
+                <Container maxWidth="xl">
+                    <Toolbar disableGutters>
+                        <LocalMoviesIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            href="/"
+                            sx={{
+                                mr: 2,
+                                display: {xs: 'none', md: 'flex'},
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                            }}
                         >
-                            <Grid item xs={12} md={12} lg={10} xl={10}>
-                                <Outlet />
-                            </Grid>
-                        </Grid>
-                    </main>
+                            {WEBSITE}
+                        </Typography>
 
-                    <Footer/>
+                        <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
+                            <AppMenu anchorElNav={anchorElNav} handleOpenNavMenu={handleOpenNavMenu}
+                                     handleCloseNavMenu={handleCloseNavMenu}/>
+                        </Box>
 
-                </Box>
-            </ThemeProvider>
-        </>
+                        <LocalMoviesIcon sx={{display: {xs: 'flex', md: 'none'}, mr: 1}}/>
+                        <Typography
+                            variant="h5"
+                            noWrap
+                            component={Link}
+                            to="/"
+                            sx={{
+                                mr: 2,
+                                display: {xs: 'flex', md: 'none'},
+                                flexGrow: 1,
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                            }}
+                        >
+                            {WEBSITE}
+                        </Typography>
+
+                        <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
+                            <PageButtons handleCloseNavMenu={handleCloseNavMenu}/>
+                        </Box>
+
+                        <Box sx={{flexGrow: 0}}>
+                            <CartIconButton/>
+                        </Box>
+                    </Toolbar>
+                </Container>
+            </AppBar>
+        </header>
+
     );
 }
 
 export default MenuBar;
+
+
+{/*            <>*/
+}
+{/*                <ThemeProvider theme={theme}>*/
+}
+{/*                    <CssBaseline/>*/
+}
+{/*            <main>*/
+}
+{/*                <Grid*/
+}
+{/*                    container*/
+}
+{/*                    sx={{py: 8}}*/
+}
+{/*                    justifyContent="center"*/
+}
+{/*                    alignItems="center"*/
+}
+{/*                >*/
+}
+{/*                    <Grid item xs={12} md={12} lg={10} xl={10}>*/
+}
+{/*                        <Outlet/>*/
+}
+{/*                    </Grid>*/
+}
+{/*                </Grid>*/
+}
+{/*            </main>*/
+}
+
+{/*            <Footer/>*/
+}
+
+{/*        </Box>*/
+}
+{/*</ThemeProvider>*/
+}
+{/*</>*/
+}

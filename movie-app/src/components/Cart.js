@@ -1,7 +1,8 @@
-
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@mui/styles';
 import {Grid, Paper, Button, Typography} from '@mui/material';
+import {Link} from 'react-router-dom';
+import useFetch from "../hooks/useFetch";
 
 const useStyles = makeStyles((theme) => ({
     c_root: {
@@ -38,20 +39,26 @@ const useStyles = makeStyles((theme) => ({
 
 const Cart = () => {
     const classes = useStyles();
+    const [data, setData] = useState([]);
 
-    const cartItems = [
-        { id: 1, title: 'Movie 1', price: 10 },
-        { id: 2, title: 'Movie 2', price: 15 },
-        { id: 3, title: 'Movie 3', price: 20 },
-    ];
+    const getCart = async () => {
+        const response = await fetch(`api/cart`);
+        const data = await response.json();
+        setData(data);
+    }
+
+    useEffect(() => {
+        getCart();
+}, []);
 
     const calculateTotalPrice = () => {
         let totalPrice = 0;
-        cartItems.forEach((item) => {
+        data.map((item) => {
             totalPrice += item.price;
         });
         return totalPrice;
     };
+
 
     return (
         <div className={classes.c_root}>
@@ -60,11 +67,11 @@ const Cart = () => {
             </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
-                    {cartItems.map((item) => (
+                    {data && data.map((item) => (
                         <Paper key={item.id} className={classes.paper}>
                             <div className={classes.cartItem}>
                                 <Typography variant="h6" className={classes.cartItemTitle}>
-                                    {item.title}
+                                    {item.name}
                                 </Typography>
                                 <Typography variant="body1" className={classes.cartItemPrice}>
                                     ${item.price}
@@ -87,7 +94,8 @@ const Cart = () => {
                                 ${calculateTotalPrice()}
                             </Typography>
                         </div>
-                        <Button variant="contained" color="primary" className={classes.checkoutButton}>
+                        <Button component={Link} to="/checkout" variant="contained" color="primary"
+                                className={classes.checkoutButton}>
                             Checkout
                         </Button>
                     </Paper>
@@ -99,113 +107,3 @@ const Cart = () => {
 
 export default Cart;
 
-
-
-// import { makeStyles } from '@material-ui/core/styles';
-// import { Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@material-ui/core';
-// import {Link} from "react-router-dom";
-//
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         display: 'flex',
-//         flexDirection: 'column',
-//         alignItems: 'center',
-//         marginTop: theme.spacing(3),
-//         marginBottom: theme.spacing(3),
-//     },
-//     title: {
-//         marginBottom: theme.spacing(2),
-//     },
-//     tableContainer: {
-//         maxWidth: 800,
-//     },
-//     table: {
-//         minWidth: 650,
-//     },
-//     buttonContainer: {
-//         display: 'flex',
-//         justifyContent: 'flex-end',
-//         marginTop: theme.spacing(2),
-//         marginBottom: theme.spacing(2),
-//     },
-//     checkoutButton: {
-//         marginLeft: theme.spacing(2),
-//     },
-// }));
-//
-// // function Cart({ cartItems, onCartItemRemove, onCheckout }) {
-// function Cart() {
-//     const cartItems = [{
-//         id: 1,
-//         title: "The Lord of the Rings",
-//         price: 15.99,
-//         quantity: 2,
-//         image: "https://www.example.com/lord-of-the-rings.jpg",
-//     }];
-//     const classes = useStyles();
-//
-//     // const handleRemoveClick = (cartItem) => {
-//     //     onCartItemRemove(cartItem);
-//     // };
-//     //
-//     // const handleCheckoutClick = () => {
-//     //     onCheckout();
-//     // };
-//
-//     return (
-//         <div className={classes.root}>
-//             <Typography variant="h4" className={classes.title}>
-//                 Your Cart
-//             </Typography>
-//             <TableContainer component={Paper} className={classes.tableContainer}>
-//                 <Table className={classes.table} aria-label="cart table">
-//                     <TableHead>
-//                         <TableRow>
-//                             <TableCell>Movie Title</TableCell>
-//                             <TableCell align="right">Price</TableCell>
-//                             <TableCell align="right">Quantity</TableCell>
-//                             <TableCell align="right">Total</TableCell>
-//                             <TableCell align="right"></TableCell>
-//                         </TableRow>
-//                     </TableHead>
-//                     <TableBody>
-//                         {cartItems.map((cartItem) => (
-//                             <TableRow key={cartItem.id}>
-//                                 <TableCell component="th" scope="row">
-//                                     {cartItem.title}
-//                                 </TableCell>
-//                                 <TableCell align="right">${cartItem.price.toFixed(2)}</TableCell>
-//                                 <TableCell align="right">{cartItem.quantity}</TableCell>
-//                                 <TableCell align="right">${(cartItem.price * cartItem.quantity).toFixed(2)}</TableCell>
-//                                 <TableCell align="right">
-//                                     {/*<Button color="secondary" onClick={() => handleRemoveClick(cartItem)}>*/}
-//                                     <Button color="secondary">
-//                                         Remove
-//                                     </Button>
-//                                 </TableCell>
-//                             </TableRow>
-//                         ))}
-//                         {cartItems.length === 0 && (
-//                             <TableRow>
-//                                 <TableCell colSpan={5} align="center">
-//                                     Your cart is empty.
-//                                 </TableCell>
-//                             </TableRow>
-//                         )}
-//                     </TableBody>
-//                 </Table>
-//             </TableContainer>
-//             <div className={classes.buttonContainer}>
-//                 <Typography variant="h6">
-//                     Total: ${cartItems.reduce((total, cartItem) => total + cartItem.price * cartItem.quantity, 0).toFixed(2)}
-//                 </Typography>
-//                 {/*<Button variant="contained" color="primary" onClick={handleCheckoutClick} disabled={cartItems.length === 0} className={classes.checkoutButton}>*/}
-//                 <Button component={Link} to='/checkout' variant="contained" color="primary"  disabled={cartItems.length === 0} className={classes.checkoutButton}>
-//                     Checkout
-//                 </Button>
-//             </div>
-//         </div>
-//     );
-// }
-//
-// export default Cart;

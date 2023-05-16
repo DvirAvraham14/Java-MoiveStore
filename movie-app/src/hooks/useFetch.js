@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 
-function useFetch(url, options = { method: 'GET' }) {
-    const [response, setResponse] = useState(null);
+function useFetch(urlInit, options = { method: 'GET' }) {
+    const [url, setUrl] = useState(urlInit);
+    const [response, setResponse] = useState({results: []});
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(false);
-
+    console.log("useFetch: ", url);
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -22,7 +23,7 @@ function useFetch(url, options = { method: 'GET' }) {
 
         fetchData();
     }, [url]);
-    return { response, error, isLoading };
+    return { response, error, isLoading ,setUrl};
 }
 
 export default useFetch;

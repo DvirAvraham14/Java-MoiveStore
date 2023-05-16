@@ -54,7 +54,7 @@ function SearchBar({ onSearch }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const genreIds = genres.genres.filter(function(genre) {
+        const genreIds = response.genres.filter(function(genre) {
             return selectedGenres.includes(genre.name);
         }).map(function(genre) {
             return genre.id;
@@ -64,7 +64,7 @@ function SearchBar({ onSearch }) {
     };
 
 
-    const { response: genres, error: g_error, isLoading: g_isLoading } = useFetch(
+    const { response, error, isLoading } = useFetch(
         `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`
     );
 
@@ -85,7 +85,7 @@ function SearchBar({ onSearch }) {
 
             <MultiSelect
                 id="genre-select"
-                options={genres ? genres.genres : []}
+                options={response ? response["genres"] : []}
                 label="Genres"
                 value={selectedGenres}
                 onChange={handleGenreChange}

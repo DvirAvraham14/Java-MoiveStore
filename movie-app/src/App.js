@@ -7,7 +7,7 @@ import Search from "./components/Search";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import PageNotFound from "./components/PageNotFound";
-import MenuBar from "./components/MenuBar";
+import MovieShoping from "./components/MovieShoping";
 import Home from "./components/Home";
 
 
@@ -17,7 +17,7 @@ const App = () => {
         <StrictMode>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<MenuBar />} >
+                    <Route path="/" element={<MovieShoping />} >
                         <Route index element={<Home />} />
                         <Route path="/search" element={<Search />} />
                         <Route path="/cart" element={<Cart />} />
