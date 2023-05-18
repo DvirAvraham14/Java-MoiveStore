@@ -7,7 +7,7 @@ const MultiSelect = ({ value, onChange, options, label }) => {
     };
 
     return (
-        <FormControl variant="outlined">
+        <FormControl sx={{minWidth: '100%'}} variant="outlined">
             <InputLabel id="multi-select-label">{label}</InputLabel>
             <Select
                 labelId="multi-select-label"

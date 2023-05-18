@@ -58,7 +58,8 @@ const Search = () => {
                     <Cards key={movie.id} data={movie} openModal={handleOpen}/>
                 ))}
             </Grid>
-            <ModalComponent open={open} handleClose={handleClose} data={modalData} />
+            { open &&
+                <ModalComponent open={open} handleClose={handleClose} data={modalData} /> }
             {isLoading && <CircularProgress/>}
         </>
     );
