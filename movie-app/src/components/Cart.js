@@ -167,13 +167,13 @@ const Cart = () => {
                 <Grid item xs={12} md={8}>
                     <Grid container gap={2}>
                         {data && data.map((item) => (
-                            <Grid item key={item.id} xs={12} md={6} lg={4}>
+                            <Grid item key={item.id} xs={12עןא}>
                                 <Item data={item}/>
                             </Grid>
                         ))}
                     </Grid>
                 </Grid>
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md={4}>
                     <Paper className={classes.paper}>
                         <Typography variant="h6" gutterBottom>
                             Summary
