@@ -167,7 +167,7 @@ const Cart = () => {
                 <Grid item xs={12} md={8}>
                     <Grid container gap={2}>
                         {data && data.map((item) => (
-                            <Grid item key={item.id} xs={12עןא}>
+                            <Grid item key={item.id} xs={12}>
                                 <Item data={item}/>
                             </Grid>
                         ))}
