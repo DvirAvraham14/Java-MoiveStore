@@ -6,26 +6,38 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+
 @Component
 public class ShoppingCart {
 
-    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<ShoppingItem> cart ;
 
     public ShoppingCart() {
-        this.products = new ArrayList<Product>();
+        this.cart = new ArrayList<ShoppingItem>();
     }
 
-    public ArrayList<Product> addProduct(Product product) {
-        products.add(product);
-        return products;
+    public ArrayList<ShoppingItem> addProduct(Product product) {
+        boolean found = false;
+        for (ShoppingItem p : cart) {
+            if (p.getProduct().getId().equals(product.getId())) {
+                p.setQuantity(p.getQuantity() + 1);
+                found = true;
+                break; // Exit the loop since the product is found
+            }
+        }
+        if (!found) {
+            cart.add(new ShoppingItem(product, 1));
+        }
+
+        return cart;
     }
 
-    public void setProducts(ArrayList<Product> products) {
-        this.products = products;
+    public void setProducts(ArrayList<ShoppingItem> products) {
+        this.cart = products;
     }
 
 
-    public ArrayList<Product> getProducts() {
-        return products;
+    public ArrayList<ShoppingItem> getCart() {
+        return cart;
     }
 }

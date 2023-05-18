@@ -1,8 +1,8 @@
+
 import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@mui/styles';
 import {Grid, Paper, Button, Typography} from '@mui/material';
 import {Link} from 'react-router-dom';
-import useFetch from "../hooks/useFetch";
 
 const useStyles = makeStyles((theme) => ({
     c_root: {
@@ -45,6 +45,7 @@ const Cart = () => {
         const response = await fetch(`api/cart`);
         const data = await response.json();
         setData(data);
+        console.log(data);
     }
 
     useEffect(() => {
@@ -54,7 +55,7 @@ const Cart = () => {
     const calculateTotalPrice = () => {
         let totalPrice = 0;
         data.map((item) => {
-            totalPrice += item.price;
+            totalPrice += item.product.price * item.quantity;
         });
         return totalPrice;
     };
@@ -66,18 +67,17 @@ const Cart = () => {
                 Cart
             </Typography>
             <Grid container spacing={3}>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} >
                     {data && data.map((item) => (
                         <Paper key={item.id} className={classes.paper}>
                             <div className={classes.cartItem}>
                                 <Typography variant="h6" className={classes.cartItemTitle}>
-                                    {item.name}
+                                    {item.product.name}
                                 </Typography>
                                 <Typography variant="body1" className={classes.cartItemPrice}>
-                                    ${item.price}
+                                    ${item.product.price}
                                 </Typography>
                             </div>
-                            {/* Add any additional item details here */}
                         </Paper>
                     ))}
                 </Grid>

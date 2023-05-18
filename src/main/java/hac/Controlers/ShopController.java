@@ -2,6 +2,7 @@ package hac.Controlers;
 
 import hac.beans.Product;
 import hac.beans.ShoppingCart;
+import hac.beans.ShoppingItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +17,13 @@ public class ShopController {
 
 
     @GetMapping("/cart")
-    public ArrayList<Product> getCart() {
-        return shoppingCart.getProducts();
+    public ArrayList<ShoppingItem> getCart() {
+        return shoppingCart.getCart();
     }
 
     @PostMapping("/cart")
-    public ShoppingCart addToCart(@RequestBody Product product) {
+    public ArrayList<ShoppingItem> addToCart(@RequestBody Product product) {
         shoppingCart.addProduct(product);
-        return shoppingCart;
+        return shoppingCart.getCart();
     }
 }

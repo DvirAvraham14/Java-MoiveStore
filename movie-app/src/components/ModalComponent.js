@@ -4,11 +4,14 @@ import {
     DialogTitle,
     DialogContent,
     CardMedia,
-    Typography,
+    Typography, DialogContentText, Box,
 } from '@mui/material';
+import IconButton from "@mui/material/IconButton";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import CartButton from "./CartButton";
 
-const ModalComponent = ({ open, handleClose, data }) => {
-    console.log(data);
+const ModalComponent = ({open, handleClose, data}) => {
+
     return (
         <Dialog
             open={open}
@@ -17,33 +20,56 @@ const ModalComponent = ({ open, handleClose, data }) => {
                 '& .MuiDialog-paper': {
                     width: '100%',
                     maxWidth: 'md',
-                    height: '90vh',
+                    height: '50vh',
                     display: 'flex',
-                    flexDirection: 'column',
+                    flexDirection: 'row',
+                    paddingLeft: '20px',
                 },
             }}
         >
-            <DialogTitle>
-                <b>fds</b>
-            </DialogTitle>
-            <DialogContent sx={{ flexGrow: 1 }}>
-                <CardMedia
-                    component="img"
-                    image={'https://image.tmdb.org/t/p/w500/' + data.poster_path}
-                    alt="random"
-                    sx={{ flexGrow: 1, objectFit: 'contain' }}
-                />
-                <Typography variant="body2" color="text.secondary">
-                    <b>Overview:</b> das
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    <b>Release Date:</b> das
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    <b>Price:</b> 3.99$
-                </Typography>
+            <CardMedia
+                component="img"
+                image={'https://image.tmdb.org/t/p/w500/' + data.poster_path}
+                alt="random"
+                sx={{
+                    width: '30%',
+                    objectFit: 'contain',
+                    position: 'sticky',
+                    left: 0,
+                }}
+            />
+
+            <DialogContent
+                sx={{
+                    flexGrow: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    padding: '16px',
+                    marginLeft: '20px', // Adjust the value to move the data to the left
+                }}
+            >
+                <DialogTitle sx={{margin: '0 auto 0 auto', letterSpacing: 6, fontWeight: 'bold'}}>
+                    {data.title}
+                </DialogTitle>
+
+                <DialogContentText sx={{flexGrow: 1}}>
+                    <Typography variant="p" color="text.secondary">
+                        {data.overview}
+                    </Typography>
+                </DialogContentText>
+
+                <Box sx={{display: 'flex', justifyContent: 'center',alignItems: 'center', gap: 3}} >
+                    <Box color="text.secondary">
+                        <b>Release Date:</b> {data.release_date}
+                    </Box>
+                    <Box color="text.secondary">
+                        <b>Price:</b> 3.39$
+                    </Box>
+                    <CartButton data={data}/>
+                </Box>
             </DialogContent>
         </Dialog>
+
     );
 };
 
