@@ -8,7 +8,7 @@ public class ShoppingItem {
 
     private Long id;
     private Product product;
-    private Integer quantity;
+    private int quantity;
 
     private static Long nextId = 1L;
 
@@ -39,11 +39,15 @@ public class ShoppingItem {
         this.product = product;
     }
 
-    public Integer getQuantity() {
+    public void updateItem(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 

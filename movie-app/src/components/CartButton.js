@@ -20,7 +20,7 @@ const CartButton = ({data}) => {
             }),
         });
         const responseData = await response.json();
-        cart.setCartSize(responseData.length);
+        cart.setCartSize(responseData.reduce((acc, item) => acc + item.quantity, 0));
     }
 
     return (

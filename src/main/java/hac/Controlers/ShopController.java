@@ -26,4 +26,14 @@ public class ShopController {
         shoppingCart.addProduct(product);
         return shoppingCart.getCart();
     }
+
+    @PutMapping("/cart/{id}")
+    public ArrayList<ShoppingItem> updateCart(@PathVariable final Long id, @RequestBody int quantity) {
+        return shoppingCart.updateItem(id, quantity);
+    }
+
+    @DeleteMapping("/cart/{id}")
+    public ArrayList<ShoppingItem> deleteItem(@PathVariable final Long id) {
+        return shoppingCart.deleteItem(id);
+    }
 }

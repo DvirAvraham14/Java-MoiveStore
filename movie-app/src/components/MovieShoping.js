@@ -16,7 +16,9 @@ const MovieShoping = () => {
     const {response, error, isLoading, setUrl} = useFetch(`api/cart`);
 
     useEffect(() => {
-        setCartSize(response.length);
+        // setCartSize(response.reduce((acc, item) => acc + item.quantity, 0));
+        if(!isLoading && response)
+            setCartSize(response.reduce((acc, item) => acc + item.quantity, 0));
     }, [response]);
 
     return (
