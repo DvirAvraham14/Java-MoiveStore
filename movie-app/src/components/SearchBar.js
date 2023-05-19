@@ -94,7 +94,7 @@ function SearchBar({ onSearch }) {
                                     onChange={handleAdvancedModeChange}
                                 />
                             }
-                            label="Advanced"
+                            label="Discover Mode"
                         />
                     </Grid>
                     <Grid item className={classes.s_root}>
