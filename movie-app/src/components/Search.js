@@ -10,10 +10,13 @@ import useFetch from '../hooks/useFetch';
 import SearchBar from './SearchBar';
 
 import ModalComponent from './ModalComponent';
+import Box from "@mui/material/Box";
 
-const API_KEY = '?api_key=' + process.env.REACT_APP_RMDB_KEY + `&language=en-US&include_adult=false&include_video=false`;
+const API_KEY = '?api_key=' + process.env.REACT_APP_RMDB_KEY +
+                        `&language=en-US&include_adult=false&include_video=false`;
 const URL = `https://api.themoviedb.org/3/movie/popular${API_KEY}`;
 
+const MAX_PAGES = 500; // tmdb have a limit of 1000 pages so i choose 500 to be safe
 const Search = () => {
 
     const {response, error, isLoading, setUrl} = useFetch(
@@ -38,7 +41,6 @@ const Search = () => {
     };
 
 
-
     const handleClose = () => {
         setOpen(false);
     };
@@ -54,36 +56,37 @@ const Search = () => {
 
     return (
         <>
-        <SearchBar onSearch={handleSearch}/>
-        {inSearch &&
-            <Typography variant="body2"
-                        sx={{fontStyle: 'italic', fontSize: '16px', marginTop: '16px', marginBottom: '16px'}}>
-                results for: {response && response.total_results} movies
-            </Typography>
-        }
-        <Grid sx={{ py: 2, gap: 2 }} container spacing={1} justifyContent="center">
-            {response && (
-                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Pagination count={response.total_pages}
-                                onChange={handleChangePage}
-                                variant="outlined" shape="rounded" />
-                </Grid>
-            )}
-            {response && response.results.map((movie) => (
-                <Cards key={movie.id} data={movie} openModal={handleOpen} />
-            ))}
+            <SearchBar onSearch={handleSearch}/>
+            {isLoading &&
+                <Box sx={{justifyContent: 'center'}}>
+                    <CircularProgress />
+                </Box>}
+            {inSearch &&
+                <Typography variant="body2"
+                            sx={{fontStyle: 'italic', fontSize: '16px', marginTop: '16px', marginBottom: '16px'}}>
+                    results for: {response && response.total_results} movies
+                </Typography>
+            }
+            <Grid sx={{py: 2, gap: 2, spacing: 1}} container justifyContent="center">
 
-        </Grid>
-{
-    open &&
-    <ModalComponent open={open} handleClose={handleClose} data={modalData}/>
-}
-{
-    isLoading && <CircularProgress/>
-}
-</>
-)
-    ;
+                {response && response.results.map((movie) => (
+                    <Grid item xs={12} sm={12} md={3}  key={movie.id}>
+                        <Cards key={movie.id} data={movie} openModal={handleOpen}/>
+                    </Grid>
+                ))}
+                {response?.total_pages > 1 && (
+                    <Grid item xs={12} sx={{display: 'flex', justifyContent: 'center'}}>
+                        <Pagination count={response.total_pages > MAX_PAGES ? MAX_PAGES : response.total_pages}
+                                    onChange={handleChangePage}
+                                    variant="outlined" shape="rounded"/>
+                    </Grid>
+                )}
+            </Grid>
+            {open && <ModalComponent open={open} handleClose={handleClose} data={modalData}/>}
+
+        </>
+    )
+        ;
 };
 
 export default Search;

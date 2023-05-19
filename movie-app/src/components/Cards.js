@@ -6,10 +6,8 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CartButton from "./CartButton";
+import {Rating} from "@mui/lab";
 
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import {useContext} from "react";
-import {CartContext} from "./MovieShoping";
 
 const Cards = ({data, openModal}) => {
 
@@ -50,6 +48,7 @@ const Cards = ({data, openModal}) => {
                     View
                 </Button>
                 <CartButton data={data}/>
+                <Rating name="half-rating" defaultValue={data.vote_average} precision={0.5} readOnly />
             </CardActions>
         </Card>
     );

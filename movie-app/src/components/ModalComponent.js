@@ -9,6 +9,7 @@ import {
 import IconButton from "@mui/material/IconButton";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import CartButton from "./CartButton";
+import {Rating} from "@mui/lab";
 
 const ModalComponent = ({open, handleClose, data}) => {
 
@@ -66,6 +67,8 @@ const ModalComponent = ({open, handleClose, data}) => {
                         <b>Price:</b> 3.39$
                     </Box>
                     <CartButton data={data}/>
+                    <Rating name="half-rating" defaultValue={data.vote_average} precision={0.5} readOnly />
+
                 </Box>
             </DialogContent>
         </Dialog>

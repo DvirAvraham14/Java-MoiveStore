@@ -68,7 +68,6 @@ function SearchBar({ onSearch }) {
 
     return (
         <form
-            className={classes.s_root}
             noValidate
             autoComplete="on"
             onSubmit={handleSubmit}
@@ -85,7 +84,7 @@ function SearchBar({ onSearch }) {
                     />
                 </Grid>
 
-                <Grid item xs={12} sm={6} container spacing={2} className={classes.s_root}>
+                <Grid item xs={12} sm={6} container spacing={2} sx={{order: 2}} className={classes.s_root}>
                     <Grid item>
                         <FormControlLabel
                             control={
@@ -97,7 +96,7 @@ function SearchBar({ onSearch }) {
                             label="Discover Mode"
                         />
                     </Grid>
-                    <Grid item className={classes.s_root}>
+                    <Grid item sx={{order: 1}} className={classes.s_root}>
                         <Button variant="contained" color="primary" type="submit">
                             Search
                         </Button>
