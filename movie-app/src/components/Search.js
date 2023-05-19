@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import Cards from './Cards';
+import { animateScroll as scroll } from 'react-scroll';
 import {
     CircularProgress,
     Typography,
@@ -52,6 +53,10 @@ const Search = () => {
 
     const handleChangePage = (event, newPage) => {
         setUrl(pageUrl + `&page=${newPage}`);
+        scroll.scrollToTop({
+            duration: 2000, // Adjust the duration as per your preference
+            smooth: 'easeInOutQuint', // Adjust the smoothness of the scrolling animation
+        });
     };
 
     return (
