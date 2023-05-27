@@ -1,6 +1,5 @@
 import React, {useContext, useState} from "react";
 import {CartContext} from "./MovieShoping";
-import {useTheme} from "@mui/material/styles";
 import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -13,12 +12,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CardMedia from "@mui/material/CardMedia";
 import useSnackbar from "../hooks/useSnackBar";
 
+/*
+    CartItem component is used to display the cart item.
+    It is used in the Cart component.
+    It takes the following props:
+        data: The cart item data.
+        updatePrice: The function to update the total price.
+ */
 const CartItem = ({data, updatePrice}) => {
-    const cart = useContext(CartContext);
-    const [quantity, setQuantity] = useState(data.quantity);
-    const [isDeleted, setIsDeleted] = useState(false);
-    const {openSnackbar, SnackbarComponent} = useSnackbar();
+    const cart = useContext(CartContext); // used to update the cart size
+    const [quantity, setQuantity] = useState(data.quantity); // used to update the quantity
+    const [isDeleted, setIsDeleted] = useState(false); // used to delete the cart item
+    const {openSnackbar, SnackbarComponent} = useSnackbar(); // used to open the snackbar
 
+    // handleCartUpdate function is used to update the cart item.
     const handleCartUpdate = async (type) => {
         const updatedQuantity = type ? quantity + 1 : quantity - 1;
         const response = await fetch(`api/cart/${data.id}`, {
@@ -28,19 +35,20 @@ const CartItem = ({data, updatePrice}) => {
             },
             body: JSON.stringify(updatedQuantity),
         });
-        if(response.status === 400) {
+        if(!response.ok) {
             openSnackbar('error', 'Not enough stock');
         }else{
             openSnackbar('success', 'Cart updated');
         }
-        const responseData = await response.json();
+        const responseData = await response.json(); // the updated cart
+        // update the cart size and the total price
         if (Array.isArray(responseData)) {
             cart.setCartSize(responseData.reduce((acc, item) => acc + item.quantity, 0));
             updatePrice(responseData.reduce((acc, item) => acc + item.quantity * item.product.price, 0));
         }
     };
 
-
+    // handleDecrease function is used to decrease the quantity of the cart item.
     const handleDecrease = () => {
         if (quantity > 1) {
             handleCartUpdate(false).then(() => {
@@ -49,20 +57,23 @@ const CartItem = ({data, updatePrice}) => {
         }
     };
 
+    // handleIncrease function is used to increase the quantity of the cart item.
     const handleIncrease = () => {
         handleCartUpdate(true).then(() => setQuantity(quantity + 1));
     };
 
+    // handleDelete function is used to delete the cart item.
     const handleDelete = async () => {
         const response = await fetch(`api/cart/${data.id}`, {
             method: 'DELETE',
         });
-        const responseData = await response.json();
-        if(response.status === 400) {
-            openSnackbar('error', 'The operation could not be completed');
+
+        if(!response.ok) {
+            openSnackbar('error', 'The operation could not be completed please try again later');
         }else{
             openSnackbar('success', 'Item deleted');
         }
+        const responseData = await response.json();
         if (Array.isArray(responseData)) {
             cart.setCartSize(responseData.reduce((acc, item) => acc + item.quantity, 0));
             updatePrice(responseData.reduce((acc, item) => acc + item.quantity * item.product.price, 0));
@@ -71,6 +82,7 @@ const CartItem = ({data, updatePrice}) => {
         setIsDeleted(true);
     }
 
+    // return the cart item
     return (
         <Collapse in={!isDeleted} collapsedSize={0} timeout={300}>
             <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
@@ -99,7 +111,7 @@ const CartItem = ({data, updatePrice}) => {
                 </Card>
                 <CardMedia
                     component="img"
-                    sx={{width: 151, alignSelf: 'center'}}
+                    sx={{width: 150, alignSelf: 'center'}}
                     image={data.product.image ? `https://image.tmdb.org/t/p/w500/${data.product.image}` : '/Image_not_available.png'}
                     alt="Live from space album cover"
                 />

@@ -12,6 +12,14 @@ const pages = [
     { name: 'Checkout', path: 'checkout' },
 ];
 
+/*
+    AppMenu component is used to display the menu icon on the mobile view.
+    It is used in the AppHeader component.
+    It takes the following props:
+        anchorElNav: The anchor element for the menu.
+        handleOpenNavMenu: The function to open the menu.
+        handleCloseNavMenu: The function to close the menu.
+ */
 function AppMenu({ anchorElNav,handleOpenNavMenu, handleCloseNavMenu }) {
     return (
         <>

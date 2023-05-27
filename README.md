@@ -1,8 +1,27 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/7Tmn2VQK)
 
 # Authors
+Yoni Bakshi: yehonatanba@edu.hac.ac.il:
+Dvir Avraham: dviravr@edu.hac.ac.il:
 
 # Explanations
+The project is a movie store, where you can buy movies and see your purchases.
+in the search page you can see all the movies in the store, and you can add them to the cart. 
+in the search bar you can search for movies by name, and you can sort the movies by name, and year.
+you can also filter the movies by genres.
+in the cart you can see the movies you have added to the cart, and you can remove them from the cart.
+in the checkout page you can see the total price of the movies you have added to the cart, and you can buy them.
+
+
+# How to run the project
+1. Run the SQL server as shown in the video (week 6) and create a database named "ex4". The DB credentials are stored in the application.properties file. You may change them if you want.
+2. Run the project, you should not see any errors in IntelliJ console
+3. Open a terminal in *movie-app* and run `npm install` and then `npm start`. You should see the client running on http://localhost:3000.
+  --- Can't run the client? ---
+    RUN `npm install --force` and then `npm start`
+4. You can also open another instance of IntelliJ and open the *movie-app* folder as a project. You can then run the client from there.
+5. You can now use the app.
+
 
 ---------------------
 
@@ -35,4 +54,3 @@ Look at the DebugController class. It has a method called "addPurchase" that rec
 When you develop your own controller, you must declare the repository member exactly as it is declared in the DebugController class.
 Then you can use it to store purchases in the DB (repository.save(purchase)).
 
-## Still have problems? Come to class.

@@ -45,13 +45,17 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
+/*
+    Cart component is used to display the cart page.
+    It is used in the App component.
+ */
 const Cart = () => {
-    const classes = useStyles();
-    const [data, setData] = useState([]);
-    const cart = useContext(CartContext);
-    const [totalPrice, setTotalPrice] = useState(0);
+    const classes = useStyles(); // Custom styles
+    const [data, setData] = useState([]); // State to store the cart data
+    const cart = useContext(CartContext);  // Cart context to get the cart size
+    const [totalPrice, setTotalPrice] = useState(0); // State to store the total price of the cart
 
+    // Function to get the cart data from the server
     const getCart = async () => {
         const response = await fetch(`api/cart`);
         const data = await response.json();
@@ -67,6 +71,8 @@ const Cart = () => {
     }, []);
 
 
+
+    // If the cart is empty, display the empty cart message
     if(cart.cartSize === 0) {
         return (
             <div className={classes.emptyCart}>
@@ -80,6 +86,7 @@ const Cart = () => {
         )
     }
 
+    // If the cart is not empty, display the cart items
     return (
         <div className={classes.c_root}>
             <Typography variant="h4" gutterBottom>

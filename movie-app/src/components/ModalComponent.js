@@ -1,16 +1,14 @@
 import React from 'react';
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    CardMedia,
-    Typography, DialogContentText, Box,
-} from '@mui/material';
-import IconButton from "@mui/material/IconButton";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import {Dialog, DialogTitle, DialogContent, CardMedia, Typography,
+    DialogContentText, Box,} from '@mui/material';
 import CartButton from "./CartButton";
 import {Rating} from "@mui/lab";
 
+const PRICE = '$3.99';
+
+/*
+    ModalComponent component is used to display the modal on the mobile view.
+ */
 const ModalComponent = ({open, handleClose, data}) => {
 
     return (
@@ -64,7 +62,7 @@ const ModalComponent = ({open, handleClose, data}) => {
                         <b>Release Date:</b> {data.release_date}
                     </Box>
                     <Box color="text.secondary">
-                        <b>Price:</b> 3.39$
+                        <b>Price:</b> {PRICE}
                     </Box>
                     <CartButton data={data}/>
                     <Rating name="half-rating" defaultValue={data.vote_average} precision={0.5} readOnly />

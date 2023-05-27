@@ -1,39 +1,39 @@
 import React, {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
-import CssBaseline from '@mui/material/CssBaseline';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {Link, Outlet} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Box from '@mui/material/Box';
-
 import AppMenu from './menuCom/AppMenu';
 import CartIconButton from './menuCom/CartIconButton';
 import PageButtons from './menuCom/PageButtons';
-//import Footer from './Footer';
-
-const theme = createTheme();
 
 const WEBSITE = 'TMDB';
 
-function MenuBar() {
-    const [anchorElNav, setAnchorElNav] = useState(null);
+/*
+    MenuBar component is used to display the menu bar on the top of the page.
+    It is used in the App component.
+    in thi
 
+ */
+function MenuBar() {
+    const [anchorElNav, setAnchorElNav] = useState(null); // State to store the anchor element of the nav menu
+
+    // Function to open the nav menu
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
-
+    // Function to close the nav menu
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
 
+    // Return the menu bar
     return (
-
         <header>
-            <AppBar position="static">
+            <AppBar position="fixed">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                         <LocalMoviesIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
@@ -96,45 +96,3 @@ function MenuBar() {
 }
 
 export default MenuBar;
-
-
-{/*            <>*/
-}
-{/*                <ThemeProvider theme={theme}>*/
-}
-{/*                    <CssBaseline/>*/
-}
-{/*            <main>*/
-}
-{/*                <Grid*/
-}
-{/*                    container*/
-}
-{/*                    sx={{py: 8}}*/
-}
-{/*                    justifyContent="center"*/
-}
-{/*                    alignItems="center"*/
-}
-{/*                >*/
-}
-{/*                    <Grid item xs={12} md={12} lg={10} xl={10}>*/
-}
-{/*                        <Outlet/>*/
-}
-{/*                    </Grid>*/
-}
-{/*                </Grid>*/
-}
-{/*            </main>*/
-}
-
-{/*            <Footer/>*/
-}
-
-{/*        </Box>*/
-}
-{/*</ThemeProvider>*/
-}
-{/*</>*/
-}

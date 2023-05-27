@@ -8,40 +8,46 @@ import Grid from '@mui/material/Grid';
 import {Outlet} from 'react-router-dom';
 import useFetch from "../hooks/useFetch";
 
-const theme = createTheme();
-export const CartContext = createContext();
+const theme = createTheme();  // Create a theme instance for the Material UI components
+export const CartContext = createContext();  // Create a context for the cart size
 
+/*
+    MovieShoping component is used to display the main page of the app.
+    this component is used in the App component.
+    it uses the MenuBar and Footer components.
+    and Outlet component to display the child components.
+ */
 const MovieShoping = () => {
-    const [cartSize, setCartSize] = useState(0);
-    const {response, error, isLoading, setUrl} = useFetch(`api/cart`);
+    const [cartSize, setCartSize] = useState(0); // State to store the cart size
+    const {response, error, isLoading, setUrl} = useFetch(`api/cart`); // Custom hook to fetch the cart data from the server
 
+    // Set the cart size when the cart data is fetched from the server
     useEffect(() => {
         // setCartSize(response.reduce((acc, item) => acc + item.quantity, 0));
         if(!isLoading && response)
             setCartSize(response.reduce((acc, item) => acc + item.quantity, 0));
     }, [response]);
 
+    // if (isLoading) return <div>Loading...</div>;
+    // if (error) return <div>Error: {error.message}</div>;
+
     return (
         <>
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
                 <Box sx={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
-                    <CartContext.Provider value={{cartSize, setCartSize}}>
-                        <MenuBar/>
-                        <main>
-                            <Grid
-                                container
-                                sx={{py: 8}}
-                                justifyContent="center"
-                                alignItems="center"
-                            >
+                    <CartContext.Provider value={{ cartSize, setCartSize }}>
+                        <MenuBar />
+                        <main style={{ marginTop: '16px' }}> {/* Adjust the margin-top value to match the height of the menu bar */}
+                            <Grid container sx={{ py: 8 }} justifyContent="center" alignItems="center">
                                 <Grid item xs={10}>
-                                    <Outlet/>
+                                    <Outlet />
                                 </Grid>
                             </Grid>
                         </main>
-                        <Footer/>
+                        <Footer />
                     </CartContext.Provider>
+
                 </Box>
             </ThemeProvider>
         </>

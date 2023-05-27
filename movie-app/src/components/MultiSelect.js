@@ -1,7 +1,13 @@
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, Chip } from '@mui/material';
 
+/*
+    MultiSelect component is used to display the multi select component.
+    It is used in the Filter component.
+    It is used to filter the movies by genre.
+ */
 const MultiSelect = ({ value, onChange, options, label }) => {
+    // Function to handle the change
     const handleChange = (event) => {
         onChange(event.target.value);
     };

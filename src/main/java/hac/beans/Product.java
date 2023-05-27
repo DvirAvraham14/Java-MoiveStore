@@ -2,6 +2,9 @@ package hac.beans;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * This class is used to create a product object
+ */
 @Component
 public class Product {
 
@@ -14,14 +17,14 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, Double price, String description, String image) {
+    public Product(Long id, String name, Double price, String image) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
     }
 
-    // getters and setters
+    // get and set methods for the product object
     public Long getId() {
         return id;
     }

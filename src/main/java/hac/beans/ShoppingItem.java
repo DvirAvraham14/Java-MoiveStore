@@ -2,19 +2,22 @@ package hac.beans;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * This class is used to create a shopping item object
+ */
 @Component
-
 public class ShoppingItem {
 
-    private Long id;
-    private Product product;
-    private int quantity;
+    private Long id; // Unique id for each item in the cart
+    private Product product; // Product object
+    private int quantity; // Quantity of the product in the cart
 
-    private static Long nextId = 1L;
+    private static Long nextId = 1L; // Used to generate unique id for each item in the cart
 
-    public ShoppingItem() {
-    }
+    // Constructors
+    public ShoppingItem() {}
 
+    // Constructor with parameters for the shopping item object
     public ShoppingItem(Product product, Integer quantity) {
         this.id = nextId++;
         this.product = product;
@@ -50,6 +53,5 @@ public class ShoppingItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
 
 }

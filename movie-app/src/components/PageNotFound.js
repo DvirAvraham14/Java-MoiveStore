@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+/*
+    PageNotFound component is used to display the 404 page not found page.
+ */
 const PageNotFound = () => {
     const classes = useStyles();
 
