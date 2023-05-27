@@ -5,6 +5,8 @@ import {Typography, TextField, Button, Grid, FormControl,
     InputLabel, MenuItem, Select, Checkbox, FormControlLabel,} from '@mui/material';
 import {CartContext} from "./MovieShoping";
 import useSnackbar from "../hooks/useSnackBar";
+import {Link} from "react-router-dom";
+import EmptyCart from "./EmptyCart";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.grey[200],
         borderRadius: theme.shape.borderRadius,
     },
+    emptyCart: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 }));
 
 const PRICE = 3.99;
@@ -31,6 +39,9 @@ const PRICE = 3.99;
  */
 const Checkout = () => {
     const cart = useContext(CartContext); // Cart context to get the cart size
+
+
+
     const { openSnackbar, SnackbarComponent } = useSnackbar(); // Custom snackbar hook
     const classes = useStyles(); // Custom styles
 
@@ -104,6 +115,12 @@ const Checkout = () => {
         await postCheckout();
     }
 
+    // If the cart is empty, display the empty cart message
+    if(cart.cartSize === 0) {
+        return (
+            <EmptyCart/>
+        );
+    }
     // Checkout component return
     return (
         <Paper sx={{ p: 2, borderRadius: 2 }}>

@@ -4,6 +4,7 @@ import {Grid, Paper, Button, Typography} from '@mui/material';
 import {Link} from 'react-router-dom';
 import {CartContext} from "./MovieShoping";
 import CartItem from "./CartItem";
+import EmptyCart from "./EmptyCart";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -75,15 +76,8 @@ const Cart = () => {
     // If the cart is empty, display the empty cart message
     if(cart.cartSize === 0) {
         return (
-            <div className={classes.emptyCart}>
-                <Typography variant="h4" gutterBottom>
-                    You're cart is empty
-                </Typography>
-                <Button component={Link} to="/search" variant="contained" color="primary">
-                    Go Shopping
-                </Button>
-            </div>
-        )
+            <EmptyCart/>
+        );
     }
 
     // If the cart is not empty, display the cart items
