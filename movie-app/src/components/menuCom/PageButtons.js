@@ -1,7 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import { Typography } from '@mui/material';
+import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
 
 const pages = [
     { name: 'Home', path: '' },
@@ -13,28 +14,60 @@ const pages = [
     PageButtons component is used to display the menu icon on the mobile view.
     It is used in the AppHeader component.
     It takes the following props:
-        anchorElNav: The anchor element for the menu.
-        handleOpenNavMenu: The function to open the menu.
         handleCloseNavMenu: The function to close the menu.
  */
+const WEBSITE = 'TMDB';
 function PageButtons({ handleCloseNavMenu }) {
     return (
-        <>
-            {pages.map((page) => (
-                <Button
-                    component={Link}
-                    to={page.path}
-                    style={{ textDecoration: 'none' }}
-                    key={page.name} // Corrected the typo here
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <LocalMoviesIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                <Typography
+                    variant="h6"
+                    noWrap
+                    sx={{
+                        color: 'white',
+                        textDecoration: 'none',
+                        '&:hover': {
+                            textDecoration: 'underline',
+                        },
+                    }}
+                    component="div"
                 >
-                    {page.name}
-                </Button>
+                    <Link to="/" onClick={handleCloseNavMenu} className="menu-link" style={{ color: 'white', textDecoration: 'none' }}>
+                        {WEBSITE}
+                    </Link>
+                </Typography>
+            </Box>
+
+            {pages.map((page) => (
+                <React.Fragment key={page.name}>
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        sx={{
+                            color: 'white',
+                            textDecoration: 'none',
+                            '&:hover': {
+                                textDecoration: 'underline',
+                            },
+                        }}
+                        component="div"
+                    >
+                        <Link
+                            to={page.path}
+                            onClick={handleCloseNavMenu}
+                            className="menu-link"
+                            style={{ color: 'white', textDecoration: 'none' }}
+                        >
+                            {page.name}
+                        </Link>
+                    </Typography>
+                </React.Fragment>
             ))}
-        </>
+        </Box>
     );
 }
-
 
 export default PageButtons;

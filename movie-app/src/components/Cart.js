@@ -68,7 +68,7 @@ const Cart = () => {
         setTotalPrice(price);
     }
     useEffect(() => {
-        getCart();
+        getCart().then(r => console.log(r));
     }, []);
 
 
@@ -109,10 +109,11 @@ const Cart = () => {
                                 ${totalPrice.toFixed(2)}
                             </Typography>
                         </div>
-                        <Button component={Link} to="/checkout" variant="contained" color="primary"
-                                className={classes.checkoutButton}>
-                            Checkout
-                        </Button>
+                        <Link to="/checkout" className={classes.checkoutButton} style={{ textDecoration: 'none' }}>
+                            <Button variant="contained" color="primary">
+                                Checkout
+                            </Button>
+                        </Link>
                     </Paper>
                 </Grid>
             </Grid>

@@ -27,9 +27,11 @@ const EmptyCart = () => {
             <Typography variant="h4" gutterBottom>
                 You're cart is empty
             </Typography>
-            <Button component={Link} to="/search" variant="contained" color="primary">
-                Go Shopping
-            </Button>
+            <Link to="/search" className={classes.checkoutButton} style={{ textDecoration: 'none' }}>
+                <Button variant="contained" color="primary">
+                    Search
+                </Button>
+            </Link>
         </div>
     );
 }

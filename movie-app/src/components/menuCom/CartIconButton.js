@@ -17,11 +17,14 @@ function CartIconButton() {
     const cart = useContext(CartContext);
 
     return (
-        <IconButton component={Link} to="/cart" size="large" aria-label="show 4 new mails" color="inherit">
-            <Badge badgeContent={cart.cartSize} color="error">
-                <ShoppingCartIcon />
-            </Badge>
-        </IconButton>
+        <Link to="/cart" style={{ textDecoration: 'none', color: 'white' }}>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                <Badge badgeContent={cart.cartSize} color="error">
+                    <ShoppingCartIcon />
+                </Badge>
+            </IconButton>
+        </Link>
+
     );
 }
 

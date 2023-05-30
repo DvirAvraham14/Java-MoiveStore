@@ -5,7 +5,6 @@ import {Typography, TextField, Button, Grid, FormControl,
     InputLabel, MenuItem, Select, Checkbox, FormControlLabel,} from '@mui/material';
 import {CartContext} from "./MovieShoping";
 import useSnackbar from "../hooks/useSnackBar";
-import {Link} from "react-router-dom";
 import EmptyCart from "./EmptyCart";
 
 const useStyles = makeStyles((theme) => ({
@@ -71,6 +70,15 @@ const Checkout = () => {
     const handleSaveCardChange = (event) => {
         setSaveCard(event.target.checked);
     };
+
+
+    // If the cart is empty, display the empty cart message
+    if(cart.cartSize === 0) {
+        return (
+            <EmptyCart/>
+        );
+    }
+
     // Function to post the checkout data to the server
     async function postCheckout() {
         const response = await fetch('checkout/purchases', {
@@ -115,12 +123,6 @@ const Checkout = () => {
         await postCheckout();
     }
 
-    // If the cart is empty, display the empty cart message
-    if(cart.cartSize === 0) {
-        return (
-            <EmptyCart/>
-        );
-    }
     // Checkout component return
     return (
         <Paper sx={{ p: 2, borderRadius: 2 }}>

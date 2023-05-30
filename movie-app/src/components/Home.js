@@ -8,6 +8,7 @@ import * as React from "react";
     It is used in the App component.
  */
 const Home = () => {
+
     return (
         <Box
             sx={{

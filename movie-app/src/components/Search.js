@@ -23,8 +23,7 @@ const Search = () => {
     const [inSearch, setInSearch] = useState(false); // the state of the search
     const {response, error, isLoading, setUrl} = useFetch(URL); // Custom hook to fetch the data from the server
 
-    // if (isLoading) return <div>Loading...</div>;
-    // if (error) return <div>Error: {error.message}</div>;
+    if (error) return <div>Error: {error.message}</div>;
 
     // Handle the pagination change event and set the new url
     const handleSearch = (searchText, genreIds, selectedPubDate) => {
